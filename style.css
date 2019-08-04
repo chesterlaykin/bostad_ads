@@ -1,0 +1,135 @@
+body{
+     /* background: #d9d9fb; */
+     background-image: url('pattern.png'); /* pattern.png */
+     /* background-repeat: no-repeat; 
+     background-size:1300px auto; */
+     font-family: 'Slabo 27px', 'sans-serif';
+     position: relative;
+     margin: 0;
+    
+}
+@media (min-width: 1300px){
+    body{
+        background-size: contain;
+    }
+}
+body::after {
+    content: "";
+    background: #4956b9;
+    /* background: #9e5ccc; */
+    opacity: 0.9;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;   
+  }
+
+.content{
+    padding: 4em;
+    max-width: 1100px;
+    margin:0 auto;
+}
+.content > h2{
+    background: wheat;
+    padding: 0.3em 1.1em;
+    display: inline-block; 
+    border-radius: 4px;
+}
+
+.content > div> h1{
+    padding: 0.3em 0;
+    border-bottom: 1px solid white;
+    color:white;
+}
+
+a{
+    text-decoration: none;
+    color: #0e9edf;
+    /* border-bottom: #cacaca 1px solid; */
+    font-size: 1.3em;
+}
+.expensive *{
+    color: #a89898;
+
+}
+.expensive hr{
+    color:#dbdbdb;
+}
+
+a:hover{
+    border-bottom: #0e9edf 1px solid;
+}
+h1{
+    margin-bottom: 1.4em;
+    font-size: 2.2em;
+    /* box-shadow: 1px 2px 2px 0px #040404; */
+}
+#header h1 + div{
+    font-weight: normal;
+    margin-left: 1.1em;
+    color: white;
+    letter-spacing: 1px;
+}
+h2{
+    font-size: 1.25em;
+}
+.adswrap{
+    flex-wrap: wrap; 
+}
+.ad{
+    flex: 0 0 20%;
+    /* min-height: 200px; */
+    margin-right: 2%;
+    padding:0.5em 1em 3em 1em;
+    margin-bottom: 2em;
+    background: white;
+    border-radius: 5px;
+}
+hr{
+    border-top: none;
+    color: #dbdbdb;
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+}
+.infosection{
+    width: 100%;
+    flex-direction: column;
+}
+.infosection > div.flexctr > div{
+    flex: 1 0 58%; 
+}
+.infosection > div{
+    flex: 0 0 100%; 
+    line-height: 1.6em;
+}
+
+.info1 > p{
+    font-size: 1.2em;
+}
+.info1 > h2{
+    min-height: 50px
+}
+
+.flexctr{
+    display:flex;
+    /* min-height: 50px; */
+}
+
+.income_today{
+    border: 6px solid #ffd444;
+}
+.size-bigger{
+    font-size: 120%;
+}
+
+.size-smaller{
+    font-size: 15px;
+}
+
+.notification{
+    font-size: 170%;;
+    color: wheat;
+    text-align: center
+}
