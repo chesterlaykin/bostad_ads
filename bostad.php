@@ -85,25 +85,46 @@ if($timeDiffHours > 10) {
     $page = file_get_contents($url);
     file_put_contents('current_ads.json', $page);
 
+    $page = json_decode($page, true);
+    $timeDiffHours = 0;
+
 }else{
     $page = file_get_contents($filename);
     $page = json_decode($page, true);
 }
  
 
-// $excludedKommuner:
+//common to both korttid and bostadsrätt
 $excludedKommuner = [
     'Järfälla','Södertälje'
 ];
 
-// $excludedStadsdelar:
 $excludedStadsdelar = [
-    'Rinkeby','Tensta'
+    'Rinkeby','Tensta','Akalla','Sigtuna', 'Blackeberg'
 ];
 
+//specific to korttid and bostadsrätt
+$excludedKortidsspecificKommuner = [
+    ''
+];
+$excludedKortidsspecificStadsdelar = [
+    ''
+];
 
-$korttid = showAds($page, 'Korttid', $excludedKommuner, $excludedStadsdelar, $now);
-$vanlig = showAds($page, 'Vanlig', $excludedKommuner, $excludedStadsdelar, $now);
+$excludedBostadsrattspecificKommuner = [
+    ''
+];
+$excludedBostadsrattspecificStadsdelar = [
+    ''
+];
+
+$excludedKortidsspecificKommuner = array_unique(array_merge($excludedKommuner, $excludedKortidsspecificKommuner));
+$excludedKortidsspecificStadsdelar = array_unique(array_merge($excludedStadsdelar, $excludedKortidsspecificStadsdelar));
+$excludedBostadsrattspecificKommuner = array_unique(array_merge($excludedKommuner, $excludedBostadsrattspecificKommuner));
+$excludedBostadsrattspecificStadsdelar = array_unique(array_merge($excludedStadsdelar , $excludedBostadsrattspecificStadsdelar));
+
+$korttid = showAds($page, 'Korttid', $excludedKortidsspecificKommuner, $excludedKortidsspecificStadsdelar, $now);
+$vanlig = showAds($page, 'Vanlig', $excludedBostadsrattspecificKommuner, $excludedBostadsrattspecificStadsdelar, $now);
    
 $nyinkomet =( $korttid['nyinkommet'] ||  $vanlig['nyinkommet']) ? true : false;
  
@@ -115,6 +136,7 @@ $adsOfTypes = [
 
 $domain = 'https://bostad.stockholm.se';
 
+$mapUrl = 'https://www.google.com/maps/search/';
 
 
 
@@ -147,7 +169,7 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
 
     $filteredAds = [];
     
-    foreach($ads as $ad){
+    foreach($ads as $ad){               //invalid arg suppl for foreach
         
         if($ad[$typeProperty] == 1){
             //See if the ad should be excluded
@@ -157,9 +179,19 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
             if($ad['AnnonseradFran'] == $now){
                 $nyinkommet = 1;
             }
+            
             $filteredAds[] = $ad;
         }
     }
+
+    //sort by date, latest first
+    usort($filteredAds, function($a, $b) {
+    
+        if (strtotime($a['AnnonseradFran']) == strtotime($b['AnnonseradFran'])) {
+            return 0;
+        }
+        return strtotime($a['AnnonseradFran']) > strtotime($b['AnnonseradFran']) ? -1 : 1;	
+    });
 
     return [
         'ads' => $filteredAds,
@@ -177,12 +209,15 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet"> 
-    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css?family=Muli&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css?family=Dosis&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>Bostadsförmedlingen - aktuella bostäder</title>
 </head>
 <body>
+    <div class="homesymbol"><i class="fas fa-home"></div></i>
     <div class="content">
-       
+        
         <div id="header">
             <h1>Annonser - <?php echo date("Y/m/d"); ?>  </h1>
             <div class="size-smaller">Listan är <span class="size-bigger"><?php echo round($timeDiffHours, 2); ?></span> timmar gammal.</div>
@@ -203,6 +238,8 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
                 <div class="adswrap flexctr">
                     <?php foreach($adsOfType as $ad) : 
                         //
+                        $currentMapUrl = $mapUrl . str_replace(' ','+',$ad['Gatuadress']) . '+' . str_replace(' ','+',$ad['Kommun']);
+
                         if(  $ad['AnnonseradFran'] == $now){
                             $income_today = 'income_today';
                         }else{
@@ -216,8 +253,11 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
                             
                                 <h2><?php echo $ad['Kommun'] . ', ' . $ad['Stadsdel']; ?> </h2>       
                                 
-                                <a href="<?php echo $domain . $ad['Url'];?>"><?php echo $ad['Gatuadress']; ?></a>
-                                <hr />
+                               <a target="_blank" href="<?php echo $domain . $ad['Url'];?>"><i class="fas fa-external-link-alt"></i><?php echo $ad['Gatuadress']; ?></span></a>
+                                <div class="map-link"><a target="_blank" href="<?php echo $currentMapUrl ;?>"><i class="fas fa-external-link-alt"></i><span>Karta</span></a></div>
+                                 
+                                <div style="padding: 0 20%"><hr /></div>
+                                
                             </div>
 
                             <div class="infosection flexctr info2">

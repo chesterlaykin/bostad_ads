@@ -1,9 +1,14 @@
-body{
-     /* background: #d9d9fb; */
-     background-image: url('pattern.png'); /* pattern.png */
-     /* background-repeat: no-repeat; 
-     background-size:1300px auto; */
-     font-family: 'Slabo 27px', 'sans-serif';
+:root {
+    --link-color: #517eff;                   /*#0e9edf */;  
+    --faded: #a2a2a2;
+  }
+  
+  body{
+     /* background: #d9d9fb; */         /* pattern.png */
+     /* background-image: url('pattern.png');  */
+     background-repeat: no-repeat; 
+     background-size:1300px auto;
+     font-family: 'Muli', 'sans-serif';
      position: relative;
      margin: 0;
     
@@ -17,7 +22,8 @@ body::after {
     content: "";
     background: #4956b9;
     /* background: #9e5ccc; */
-    opacity: 0.9;
+    opacity: 0.2;
+    /* opacity: 0.9; */
     top: 0;
     left: 0;
     bottom: 0;
@@ -27,40 +33,48 @@ body::after {
   }
 
 .content{
+    position: relative;
     padding: 4em;
-    max-width: 1100px;
+    max-width: 1300px;
     margin:0 auto;
 }
 .content > h2{
     background: wheat;
     padding: 0.3em 1.1em;
     display: inline-block; 
-    border-radius: 4px;
+    border-radius:4px;
+    /* border-top-right-radius: 4px; 
+border-top-left-radius: 4px; */
+    /* margin-bottom:0; */
 }
 
 .content > div> h1{
+    width:50%;
     padding: 0.3em 0;
-    border-bottom: 1px solid white;
     color:white;
 }
 
 a{
     text-decoration: none;
-    color: #0e9edf;
-    /* border-bottom: #cacaca 1px solid; */
+    color:  var(--link-color); 
     font-size: 1.3em;
 }
-.expensive *{
-    color: #a89898;
 
+.expensive a {
+    /* --link-color: var(--faded); */
+}
+.expensive .info1 i{
+    color: var(--faded);
 }
 .expensive hr{
-    color:#dbdbdb;
+    color:#d5d5d5;
 }
-
-a:hover{
-    border-bottom: #0e9edf 1px solid;
-}
+/* h1, h2, h3, h4, h5{
+    font-family: 'Muli','sans-serif';
+} */
+/* a:hover{
+    border-bottom: var(--link-color) 1px solid;
+} */
 h1{
     margin-bottom: 1.4em;
     font-size: 2.2em;
@@ -81,17 +95,23 @@ h2{
 .ad{
     flex: 0 0 20%;
     /* min-height: 200px; */
-    margin-right: 2%;
-    padding:0.5em 1em 3em 1em;
+    margin-right: 1.6%;
+    padding:0.5em 1em 3em 1.2em;
     margin-bottom: 2em;
-    background: white;
+    /* background: white; */
+    background:rgba(255, 255, 255, 0.51);
     border-radius: 5px;
+    border: 6px solid transparent;
+    font-size:91%;
+}
+.ad:first-child {
+    /* border-top-left-radius: 0; */
 }
 hr{
     border-top: none;
-    color: #dbdbdb;
-    margin-bottom: 1.5em;
-    margin-top: 1.5em;
+    color: #bdbdbd;
+    margin-bottom: 2em; 
+    margin-top: 1em;
 }
 .infosection{
     width: 100%;
@@ -102,7 +122,7 @@ hr{
 }
 .infosection > div{
     flex: 0 0 100%; 
-    line-height: 1.6em;
+    line-height: 1.9em;
 }
 
 .info1 > p{
@@ -111,14 +131,46 @@ hr{
 .info1 > h2{
     min-height: 50px
 }
+.info1 a > i{
+    margin-right: 7px;
+    color: var(--link-color); 
+}
+.map-link * {
+    color: rgb(162, 162, 162);
+    margin-right: 7px;
+    /* font-size:1em;  */
+    line-height: 3.4em;
+}
+a > span:hover{
+    border-bottom:var(--link-color) 1px solid;
+}   
+.map-link a > i{
+    color:rgb(162, 162, 162);
+}
+.map-link a > span:hover{
+    border-bottom: rgb(71, 71, 71) 1px solid;
+}
 
+.homesymbol{
+    position:absolute;
+    top: 0;
+    right:0;
+}
+.homesymbol > i{
+    font-size: 27em;
+    color:rgba(66, 179, 255, 0.137);
+}
+.expensive *{
+    color: var(--faded);
+
+}
 .flexctr{
     display:flex;
     /* min-height: 50px; */
 }
 
 .income_today{
-    border: 6px solid #ffd444;
+    border: 6px solid wheat;
 }
 .size-bigger{
     font-size: 120%;
