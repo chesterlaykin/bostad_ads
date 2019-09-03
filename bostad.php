@@ -299,76 +299,77 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
                             }else{
                                 $income_today = '';
                             }   ?>
-                            
                             <div class="ad <?php echo ($ad['Hyra'] > 7000) ? 'expensive ' : ' '; echo $income_today; ?>">
-                                <?php //echo $ad[''] . ', ' . echo $ad['']; ?>
+                                <div class="">
+                                    <?php //echo $ad[''] . ', ' . echo $ad['']; ?>
 
-                                <div class="info1">
-                                
-                                    <h2><?php echo $ad['Kommun'] . ', ' . $ad['Stadsdel']; ?> </h2>       
+                                    <div class="info1">
                                     
-                                <a target="_blank" href="<?php echo $domain . $ad['Url'];?>"><i class="fas fa-external-link-alt"></i><?php echo $ad['Gatuadress']; ?></span></a>
-                                    <div class="map-link"><a target="_blank" href="<?php echo $currentMapUrl ;?>"><i class="fas fa-external-link-alt"></i><span>Karta</span></a></div>
-                                    
-                                    <div class="hr hr_first"><hr /></div>
-                                    
-                                </div>
-
-                                <div class="infosection flexctr info2">
-                                    <?php if($ad['Antal'] > 1): ?>
-                                    <div class="flexctr">
-                                        <div><strong><?php echo $ad['Antal'] . ' lägenheter'; ?></strong></div>
+                                        <h2><?php echo $ad['Kommun'] . ', ' . $ad['Stadsdel']; ?> </h2>       
+                                        
+                                    <a target="_blank" href="<?php echo $domain . $ad['Url'];?>"><i class="fas fa-external-link-alt"></i><?php echo $ad['Gatuadress']; ?></span></a>
+                                        <div class="map-link"><a target="_blank" href="<?php echo $currentMapUrl ;?>"><i class="fas fa-external-link-alt"></i><span>Karta</span></a></div>
+                                        
+                                        <div class="hr hr_first"><hr /></div>
+                                        
                                     </div>
-                                    <?php endif;
-                                    if($ad['Nyproduktion']): ?>
+
+                                    <div class="infosection flexctr info2">
+                                        <?php if($ad['Antal'] > 1): ?>
+                                        <div class="flexctr">
+                                            <div><strong><?php echo $ad['Antal'] . ' lägenheter'; ?></strong></div>
+                                        </div>
+                                        <?php endif;
+                                        if($ad['Nyproduktion']): ?>
+                                                <div class="flexctr">
+                                                    <div><strong>Nyproduktion</strong></div>
+                                                </div>
+                                        <?php endif; ?>
+                                        <div class="flexctr">
+                                            <div>Antal rum</div><div class="size-bigger"> <?php echo $ad['AntalRum']; ?></div>
+                                        </div>
+                                        <?php if($ad['Antal'] == 1): ?>
                                             <div class="flexctr">
-                                                <div><strong>Nyproduktion</strong></div>
+                                                <div>Yta</div><div class="size-bigger"> <?php echo $ad['Yta']; ?></div>
                                             </div>
-                                    <?php endif; ?>
-                                    <div class="flexctr">
-                                        <div>Antal rum</div><div class="size-bigger"> <?php echo $ad['AntalRum']; ?></div>
-                                    </div>
-                                    <?php if($ad['Antal'] == 1): ?>
+                                        <?php endif; ?>
                                         <div class="flexctr">
-                                            <div>Yta</div><div class="size-bigger"> <?php echo $ad['Yta']; ?></div>
+                                            <div>Våningsplan</div><div class="size-bigger"> <?php echo $ad['Vaning']; ?></div>
                                         </div>
-                                    <?php endif; ?>
-                                    <div class="flexctr">
-                                        <div>Våningsplan</div><div class="size-bigger"> <?php echo $ad['Vaning']; ?></div>
-                                    </div>
-                                    <div class="flexctr">
-                                        <div>Hyra</div><div class="size-bigger"> <?php echo $ad['Hyra']; ?> kr</div>
-                                    </div>
-                                    <?php if($ad['Balkong']): ?>
                                         <div class="flexctr">
-                                            <div>Balkong</div>
+                                            <div>Hyra</div><div class="size-bigger"> <?php echo $ad['Hyra']; ?> kr</div>
                                         </div>
-                                    <?php endif; ?>
-                                </div>
+                                        <?php if($ad['Balkong']): ?>
+                                            <div class="flexctr">
+                                                <div>Balkong</div>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <div class="infosection flexctr info3">
+                                        <div class="flexctr">
+                                            <div>Annonserad från:</div><div> <?php echo $ad['AnnonseradFran']; ?></div>
+                                        </div>
+                                        <div class="flexctr">
+                                            <div>Annonserad till</div><div> <?php echo $ad['AnnonseradTill']; ?></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr_last"><hr /></div>
+
+                                    <div class="infosection flexctr info4">
+
+
+                                        <?php if($ad['KoNamn'] !== 'Bostadskön') : ?>
+
+                                            <div class="flexctr">
+                                                <div>Könamn:</div><div><?php echo $ad['KoNamn']; ?></div>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                    
                                 
-                                <div class="infosection flexctr info3">
-                                    <div class="flexctr">
-                                        <div>Annonserad från:</div><div> <?php echo $ad['AnnonseradFran']; ?></div>
-                                    </div>
-                                    <div class="flexctr">
-                                        <div>Annonserad till</div><div> <?php echo $ad['AnnonseradTill']; ?></div>
-                                    </div>
                                 </div>
-
-                                <div class="hr hr_last"><hr /></div>
-
-                                <div class="infosection flexctr info4">
-
-
-                                    <?php if($ad['KoNamn'] !== 'Bostadskön') : ?>
-
-                                        <div class="flexctr">
-                                            <div>Könamn:</div><div><?php echo $ad['KoNamn']; ?></div>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
-                                
-                            
                             </div>
                         <?php endforeach; ?>
                     </div>

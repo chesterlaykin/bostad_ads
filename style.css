@@ -6,7 +6,8 @@
     --a1: #912fe3;
     --a1b_op: rgba(126, 94, 215, 0.37);
     --a2: rgba(105, 53, 140, 0.73); /*#69358c;*/
-    --highlight1: wheat;
+    --highlight1: linear-gradient(to right, #b054544f 0%, #b05454c4 96%); /*#b05454*/ /* wheat;*/
+    --offwhite: rgb(253, 250, 243);
   }
   
   body{
@@ -136,14 +137,18 @@ h2{
     flex: 0 0 20%;
     /* min-height: 200px; */
     margin-right: 1.6%;
-    padding:0.5em 1em 3em 1.2em;
+    padding:5px;
+    /* padding:0.5em 1em 3em 1.2em; */
     margin-bottom: 2em;
     /* background: white; */
-    background:rgba(255, 255, 255, 0.75);
-    background:rgba(255, 255, 255, 0.75);
+    background: var(--offwhite);
     border-radius: 5px;
-    border: 6px solid transparent;
+    /* border: 6px solid transparent; */
     font-size:91%;
+}
+.ad > div{
+    background:rgb(255, 255, 255);
+    padding: 1em;
 }
 .ad:first-child {
     /* border-top-left-radius: 0; */
@@ -216,8 +221,15 @@ a > span:hover{
     /* min-height: 50px; */
 }
 
+.ad,
 .income_today{
-    border: 6px solid var(--highlight1);
+    padding:4px;
+}
+
+.income_today{
+    background: var(--highlight1);
+    padding:5px;
+    /* border: 6px solid  */
 }
 .size-bigger{
     font-size: 120%;
