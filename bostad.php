@@ -82,6 +82,9 @@ $timeDiffHours = (time() - $lastSavedime) / 3600;
 //if saved file is older than a specific amount of hours, fetch a new list
 if($timeDiffHours > 10) {
 
+    //TODO: 1. keep old list, see which results, dating from yesterday and backwards,
+    //which is not outdated, which are missing from the latest list.
+    //List those under the new ones.
     $page = file_get_contents($url);
     file_put_contents('current_ads.json', $page);
 
@@ -93,14 +96,44 @@ if($timeDiffHours > 10) {
     $page = json_decode($page, true);
 }
  
+//TODO - after below creation of custom list of ads without excludes,
+//loop through them and fetch additional info from each page on https://bostad.stockholm.se/
+function fetchSaveAdditionalInfo($adsOfTypes){
+
+    foreach($adsOfTypes as $adType){
+
+        // $page = file_get_contents($url);
+
+        /*
+            https://medium.com/velotio-perspectives/web-scraping-introduction-best-practices-caveats-9cbf4acc8d0f
+
+            User Agent Rotation and Spoofing: A User-Agent String in the request header helps 
+            identify which browser is being used, what version, and on which operating system. 
+            Every request made from a web browser contains a user-agent header and using the 
+            same user-agent consistently leads to the detection of a bot. User Agent rotation 
+            and spoofing is the best solution for this. Spoof the User Agent by creating a list 
+            of user agents and picking a random one for each request. Websites do not want to
+            block genuine users so you should try to look like one. Set your user-agent to a 
+            common web browser instead of using the default user-agent (such as wget/version
+            or urllib/version)! If you’re using Scrapy then you can set USER_AGENT property 
+            in settings.py. 
+            Generally, you can keep the format as: ‘myspidername: myemailaddress’ so that the 
+            target website would know it’s a spider and contact address.
+        */
+        //dont make all requests at the same time (might get blocked)
+        usleep(10000000);
+    }
+}
+
 
 //common to both korttid and bostadsrätt
 $excludedKommuner = [
-    'Järfälla','Södertälje'
+    'Järfälla','Södertälje','Sigtuna', 'Botkyrka', 'Österåker', 'Upplands Väsby','Västerås', 'Norrtälje'
 ];
 
 $excludedStadsdelar = [
-    'Rinkeby','Tensta','Akalla','Sigtuna', 'Blackeberg'
+    'Rinkeby','Tensta','Akalla','Sigtuna', 'Blackeberg','Hässelby Strand',
+    'Hässelby Gård','Skärholmen', 'Husby','Rågsved','Fisksätra', 'Hökarängen'
 ];
 
 //specific to korttid and bostadsrätt
@@ -115,7 +148,8 @@ $excludedBostadsrattspecificKommuner = [
     ''
 ];
 $excludedBostadsrattspecificStadsdelar = [
-    ''
+    'Solhem'.'Bredäng', 'Bagarmossen','Vällingby','Kista','Fruängen','Bredäng','Mariehäll',
+    'Vällingby','Skarpnäcks Gård','Flemingsberg'
 ];
 
 $excludedKortidsspecificKommuner = array_unique(array_merge($excludedKommuner, $excludedKortidsspecificKommuner));
@@ -130,8 +164,14 @@ $nyinkomet =( $korttid['nyinkommet'] ||  $vanlig['nyinkommet']) ? true : false;
  
 
 $adsOfTypes = [
-    'korttid' => $korttid['ads'],
-    'vanlig' => $vanlig['ads']
+    'korttid' => [
+        'ads' => $korttid['ads'],
+        'excluded_count' => $korttid['excluded_count'],
+    ],
+    'vanlig' => [
+        'ads' => $vanlig['ads'],
+        'excluded_count' => $vanlig['excluded_count'],
+    ],
 ];
 
 $domain = 'https://bostad.stockholm.se';
@@ -165,17 +205,22 @@ $mapUrl = 'https://www.google.com/maps/search/';
 
 function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$now ){
    
+    $excludedCount = 0;
+
     $nyinkommet = 0;
 
     $filteredAds = [];
     
-    foreach($ads as $ad){               //invalid arg suppl for foreach
+    foreach($ads as $ad){        
         
-        if($ad[$typeProperty] == 1){
+        if($ad[$typeProperty] == 1) {
+
             //See if the ad should be excluded
-            if($ad['AntalRum'] > 3 || in_array($ad['Kommun'], $excludedKommuner) || in_array($ad['Stadsdel'], $excludedStadsdelar)){
+
+            if($ad['AntalRum'] > 3 || in_array($ad['Kommun'], $excludedKommuner) || in_array($ad['Stadsdel'], $excludedStadsdelar)) {
+                $excludedCount++;
                 continue;
-            } 
+            }
             if($ad['AnnonseradFran'] == $now){
                 $nyinkommet = 1;
             }
@@ -195,7 +240,8 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
 
     return [
         'ads' => $filteredAds,
-        'nyinkommet' => $nyinkommet
+        'nyinkommet' => $nyinkommet,
+        'excluded_count' => $excludedCount
     ];
      
 }
@@ -216,92 +262,103 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
 </head>
 <body>
     <div class="homesymbol"><i class="fas fa-home"></div></i>
-    <div class="content">
+    <div>
         
-        <div id="header">
-            <h1>Annonser - <?php echo date("Y/m/d"); ?>  </h1>
-            <div class="size-smaller">Listan är <span class="size-bigger"><?php echo round($timeDiffHours, 2); ?></span> timmar gammal.</div>
-            <?php if(!$nyinkomet): ?>
-
-                <p class="notification">Inget nyinkommet idag</p>
-            <?php endif; ?>
+        <div id="header-wrap">
+            <div id="header">
+                <h1>Annonser - <?php echo date("Y/m/d"); ?>  </h1>
+                <p>Från Stockholms bostadskö</p>
+            </div>
         </div>
+        <div class="content">
+            <div class="row">
+                <div class="size-smaller">Listan är <span class="size-bigger"><?php echo round($timeDiffHours, 2); ?></span> timmar gammal.</div>
+                <?php if(!$nyinkomet): ?>
 
-        <?php if(isset($adsOfTypes) && !empty($adsOfTypes)):  
- 
-            foreach($adsOfTypes as $key => $adsOfType) : 
-                 
-                $adType = ($key == 'korttid') ? 'Korttidskontrakt' : 'Hyresrätter'; ?>
+                    <p class="notification">Inget nyinkommet idag</p>
+                <?php endif; ?>
+            </div>
+            <?php if(isset($adsOfTypes) && !empty($adsOfTypes)):  
+    
+                
+                foreach($adsOfTypes as $key => $adsOfType) : 
 
-                <h2><?php echo $adType . ' ( ' . count($adsOfType) . ' st )' ?> </h2> 
+                    // $exludedCount = ($key == 'korttid') ? $adsOfTypes['excluded_count'] : $adsOfTypes['vanlig']['excluded_count']; 
+            
+                    $adType = ($key == 'korttid') ? 'Korttidskontrakt' : 'Hyresrätter'; ?>
 
-                <div class="adswrap flexctr">
-                    <?php foreach($adsOfType as $ad) : 
-                        //
-                        $currentMapUrl = $mapUrl . str_replace(' ','+',$ad['Gatuadress']) . '+' . str_replace(' ','+',$ad['Kommun']);
+                    <h2><?php echo $adType . ' ( ' . count($adsOfType['ads']) . ' st )' ?> </h2> 
+                    <p class="faded"><?php echo ($adsOfType['excluded_count'] == 1) ? $adsOfType['excluded_count'] . ' bostad är exkluderad.' : $adsOfType['excluded_count'] . ' bostäder är exkluderade.'; ?></p>
+                    <div class="adswrap flexctr">
+                        <?php foreach($adsOfType['ads'] as $ad) : 
+                            //
+                            $currentMapUrl = $mapUrl . str_replace(' ','+',$ad['Gatuadress']) . '+' . str_replace(' ','+',$ad['Kommun']);
 
-                        if(  $ad['AnnonseradFran'] == $now){
-                            $income_today = 'income_today';
-                        }else{
-                            $income_today = '';
-                        }   ?>
-                        
-                        <div class="ad <?php echo ($ad['Hyra'] > 7000) ? 'expensive ' : ' '; echo $income_today; ?>">
-                            <?php //echo $ad[''] . ', ' . echo $ad['']; ?>
-
-                            <div class="info1">
+                            if(  $ad['AnnonseradFran'] == $now){
+                                $income_today = 'income_today';
+                            }else{
+                                $income_today = '';
+                            }   ?>
                             
-                                <h2><?php echo $ad['Kommun'] . ', ' . $ad['Stadsdel']; ?> </h2>       
-                                
-                               <a target="_blank" href="<?php echo $domain . $ad['Url'];?>"><i class="fas fa-external-link-alt"></i><?php echo $ad['Gatuadress']; ?></span></a>
-                                <div class="map-link"><a target="_blank" href="<?php echo $currentMapUrl ;?>"><i class="fas fa-external-link-alt"></i><span>Karta</span></a></div>
-                                 
-                                <div style="padding: 0 20%"><hr /></div>
-                                
-                            </div>
+                            <div class="ad <?php echo ($ad['Hyra'] > 7000) ? 'expensive ' : ' '; echo $income_today; ?>">
+                                <?php //echo $ad[''] . ', ' . echo $ad['']; ?>
 
-                            <div class="infosection flexctr info2">
-                                <?php if($ad['Antal'] > 1): ?>
-                                <div class="flexctr">
-                                    <div><strong><?php echo $ad['Antal'] . ' lägenheter'; ?></strong></div>
+                                <div class="info1">
+                                
+                                    <h2><?php echo $ad['Kommun'] . ', ' . $ad['Stadsdel']; ?> </h2>       
+                                    
+                                <a target="_blank" href="<?php echo $domain . $ad['Url'];?>"><i class="fas fa-external-link-alt"></i><?php echo $ad['Gatuadress']; ?></span></a>
+                                    <div class="map-link"><a target="_blank" href="<?php echo $currentMapUrl ;?>"><i class="fas fa-external-link-alt"></i><span>Karta</span></a></div>
+                                    
+                                    <div class="hr hr_first"><hr /></div>
+                                    
                                 </div>
-                                <?php endif;
-                                if($ad['Nyproduktion']): ?>
+
+                                <div class="infosection flexctr info2">
+                                    <?php if($ad['Antal'] > 1): ?>
+                                    <div class="flexctr">
+                                        <div><strong><?php echo $ad['Antal'] . ' lägenheter'; ?></strong></div>
+                                    </div>
+                                    <?php endif;
+                                    if($ad['Nyproduktion']): ?>
+                                            <div class="flexctr">
+                                                <div><strong>Nyproduktion</strong></div>
+                                            </div>
+                                    <?php endif; ?>
+                                    <div class="flexctr">
+                                        <div>Antal rum</div><div class="size-bigger"> <?php echo $ad['AntalRum']; ?></div>
+                                    </div>
+                                    <?php if($ad['Antal'] == 1): ?>
                                         <div class="flexctr">
-                                            <div><strong>Nyproduktion</strong></div>
+                                            <div>Yta</div><div class="size-bigger"> <?php echo $ad['Yta']; ?></div>
                                         </div>
-                                <?php endif; ?>
-                                <div class="flexctr">
-                                    <div>Antal rum</div><div class="size-bigger"> <?php echo $ad['AntalRum']; ?></div>
-                                </div>
-                                <?php if($ad['Antal'] == 1): ?>
+                                    <?php endif; ?>
                                     <div class="flexctr">
-                                        <div>Yta</div><div class="size-bigger"> <?php echo $ad['Yta']; ?></div>
+                                        <div>Våningsplan</div><div class="size-bigger"> <?php echo $ad['Vaning']; ?></div>
                                     </div>
-                                <?php endif; ?>
-                                <div class="flexctr">
-                                    <div>Våningsplan</div><div class="size-bigger"> <?php echo $ad['Vaning']; ?></div>
-                                </div>
-                                <div class="flexctr">
-                                    <div>Hyra</div><div class="size-bigger"> <?php echo $ad['Hyra']; ?> kr</div>
-                                </div>
-                                <?php if($ad['Balkong']): ?>
                                     <div class="flexctr">
-                                        <div>Balkong</div>
+                                        <div>Hyra</div><div class="size-bigger"> <?php echo $ad['Hyra']; ?> kr</div>
                                     </div>
-                                 <?php endif; ?>
-                            </div>
-                            
-                            <div class="infosection flexctr info3">
-                                <div class="flexctr">
-                                    <div>Annonserad från:</div><div> <?php echo $ad['AnnonseradFran']; ?></div>
+                                    <?php if($ad['Balkong']): ?>
+                                        <div class="flexctr">
+                                            <div>Balkong</div>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
-                                <div class="flexctr">
-                                    <div>Annonserad till</div><div> <?php echo $ad['AnnonseradTill']; ?></div>
+                                
+                                <div class="infosection flexctr info3">
+                                    <div class="flexctr">
+                                        <div>Annonserad från:</div><div> <?php echo $ad['AnnonseradFran']; ?></div>
+                                    </div>
+                                    <div class="flexctr">
+                                        <div>Annonserad till</div><div> <?php echo $ad['AnnonseradTill']; ?></div>
+                                    </div>
                                 </div>
-                            </div>
-                            
+
+                                <div class="hr hr_last"><hr /></div>
+
                                 <div class="infosection flexctr info4">
+
 
                                     <?php if($ad['KoNamn'] !== 'Bostadskön') : ?>
 
@@ -310,17 +367,17 @@ function showAds( $ads, $typeProperty,  $excludedKommuner, $excludedStadsdelar,$
                                         </div>
                                     <?php endif; ?>
                                 </div>
+                                
                             
-                           
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>                
     </div>
  
-
+    <script src="bostad.js"></script>
 </body>
 </html>
 

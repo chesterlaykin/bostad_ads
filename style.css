@@ -1,11 +1,18 @@
 :root {
     --link-color: #517eff;                   /*#0e9edf */;  
     --faded: #a2a2a2;
+    --b1: #b05454;
+    --b2: #a66060;
+    --a1: #912fe3;
+    --a1b_op: rgba(126, 94, 215, 0.37);
+    --a2: rgba(105, 53, 140, 0.73); /*#69358c;*/
+    --highlight1: wheat;
   }
   
   body{
      /* background: #d9d9fb; */         /* pattern.png */
      /* background-image: url('pattern.png');  */
+     
      background-repeat: no-repeat; 
      background-size:1300px auto;
      font-family: 'Muli', 'sans-serif';
@@ -21,8 +28,8 @@
 body::after {
     content: "";
     background: #4956b9;
-    /* background: #9e5ccc; */
-    opacity: 0.2;
+    background: radial-gradient(circle at 50%, #7b55a2, #fff6c10d 60%, var(--a1) 65%);
+    /* opacity: 0.2; */
     /* opacity: 0.9; */
     top: 0;
     left: 0;
@@ -34,12 +41,18 @@ body::after {
 
 .content{
     position: relative;
-    padding: 4em;
+    /* padding: 0 4em 4em 4em; */
+    
+}
+
+#header,
+.content{
     max-width: 1300px;
     margin:0 auto;
 }
+
 .content > h2{
-    background: wheat;
+    background: var(--highlight1);
     padding: 0.3em 1.1em;
     display: inline-block; 
     border-radius:4px;
@@ -47,19 +60,17 @@ body::after {
 border-top-left-radius: 4px; */
     /* margin-bottom:0; */
 }
-
-.content > div> h1{
-    width:50%;
-    padding: 0.3em 0;
-    color:white;
-}
-
+ 
 a{
     text-decoration: none;
     color:  var(--link-color); 
     font-size: 1.3em;
 }
-
+p{
+    padding-top: 0;
+    padding-bottom: 5px;
+    margin:0;
+}
 .expensive a {
     /* --link-color: var(--faded); */
 }
@@ -69,6 +80,15 @@ a{
 .expensive hr{
     color:#d5d5d5;
 }
+.faded{
+    color: var(--faded);
+}
+
+.hr{
+    padding: 0 20%;
+
+}
+
 /* h1, h2, h3, h4, h5{
     font-family: 'Muli','sans-serif';
 } */
@@ -76,9 +96,29 @@ a{
     border-bottom: var(--link-color) 1px solid;
 } */
 h1{
-    margin-bottom: 1.4em;
-    font-size: 2.2em;
+    margin-bottom: 1.8em;
+    font-size: 1.9em;
     /* box-shadow: 1px 2px 2px 0px #040404; */
+}
+#header-wrap{
+    background: var(--a1b_op);
+    border-bottom: 1px solid var(--a2);
+    margin-bottom: 3em;
+}
+#header {
+    padding: 0.8em 0; 
+    
+}
+#header p{
+    color: var(--b2)
+}
+#header > h1{
+    width:50%;
+    padding: 0;
+    margin-bottom: 0.2em;
+    margin-top:0;
+    /* padding: 0.3em 0; */
+    color: var(--b1);
 }
 #header h1 + div{
     font-weight: normal;
@@ -99,7 +139,8 @@ h2{
     padding:0.5em 1em 3em 1.2em;
     margin-bottom: 2em;
     /* background: white; */
-    background:rgba(255, 255, 255, 0.51);
+    background:rgba(255, 255, 255, 0.75);
+    background:rgba(255, 255, 255, 0.75);
     border-radius: 5px;
     border: 6px solid transparent;
     font-size:91%;
@@ -110,8 +151,14 @@ h2{
 hr{
     border-top: none;
     color: #bdbdbd;
-    margin-bottom: 2em; 
-    margin-top: 1em;
+      
+}
+.hr_first{
+    margin-bottom: 2em;  
+}
+.hr_last{
+    margin-top: 2em;
+
 }
 .infosection{
     width: 100%;
@@ -148,7 +195,7 @@ a > span:hover{
     color:rgb(162, 162, 162);
 }
 .map-link a > span:hover{
-    border-bottom: rgb(71, 71, 71) 1px solid;
+    border-bottom: rgba(162, 162, 162,0.9) 1px solid;
 }
 
 .homesymbol{
@@ -170,7 +217,7 @@ a > span:hover{
 }
 
 .income_today{
-    border: 6px solid wheat;
+    border: 6px solid var(--highlight1);
 }
 .size-bigger{
     font-size: 120%;
@@ -182,6 +229,6 @@ a > span:hover{
 
 .notification{
     font-size: 170%;;
-    color: wheat;
+    color: black;  
     text-align: center
 }
