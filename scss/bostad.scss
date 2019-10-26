@@ -1,15 +1,24 @@
 :root {
     --link-color: #517eff;                   /*#0e9edf */;  
     --faded: #a2a2a2;
-    --b1: #b05454;
-    --b2: #a66060;
-    --a1: #912fe3;
-    --a1b_op: rgba(126, 94, 215, 0.37);
-    --a2: rgba(105, 53, 140, 0.73); /*#69358c;*/
-    --highlight1: linear-gradient(to right, #b054544f 0%, #b05454c4 96%); /*#b05454*/ /* wheat;*/
+    --b1: #ffffea;
+    --b2: #e7e7e7;
+    --a1: #acb8fc;
+    --a1b_op: rgba(255, 255, 255, 0.09);
+    
+    --a2: rgba(142, 166, 197, 0.73); /*#69358c;*/
+    --highlight1: linear-gradient(to right, var(--accent_a1) 0%,var(--accent_a2) 96%);
+    --highlight2_op: rgba(74, 122, 255, 0.46);
+    --accent_a1: #f9e975b6;
+    --accent_a2: #4acc719d 96%;
     --offwhite: rgb(253, 250, 243);
+    --radial1: radial-gradient(circle at 50%, #75adf7, #fff6c10d 60%, var(--a1) 65%);
   }
   
+
+
+
+
   body{
      /* background: #d9d9fb; */         /* pattern.png */
      /* background-image: url('pattern.png');  */
@@ -29,7 +38,7 @@
 body::after {
     content: "";
     background: #4956b9;
-    background: radial-gradient(circle at 50%, #7b55a2, #fff6c10d 60%, var(--a1) 65%);
+    background: var(--radial1);
     /* opacity: 0.2; */
     /* opacity: 0.9; */
     top: 0;
@@ -145,8 +154,12 @@ h2{
     border-radius: 5px;
     /* border: 6px solid transparent; */
     font-size:91%;
+    display: flex; 
+    flex-direction: column;
 }
 .ad > div{
+    border-radius: 3px;
+    flex-grow: 1;
     background:rgb(255, 255, 255);
     padding: 1em;
 }
@@ -226,10 +239,14 @@ a > span:hover{
     padding:4px;
 }
 
-.income_today{
+.content .adswrap .income_today{
     background: var(--highlight1);
     padding:5px;
     /* border: 6px solid  */
+}
+.ad:not(.income_today){
+    border: 1px solid var(--highlight2_op);
+    
 }
 .size-bigger{
     font-size: 120%;
@@ -244,3 +261,5 @@ a > span:hover{
     color: black;  
     text-align: center
 }
+
+ 

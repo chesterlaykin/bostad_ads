@@ -1,0 +1,14 @@
+{
+    "name": "joels/bostad",
+    "description": "display filtered ads from bostadsformedlingen.se",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "chesterlaykin",
+            "email": "joelsetterberg@hotmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
