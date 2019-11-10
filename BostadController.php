@@ -23,10 +23,7 @@ class BostadController extends Controller {
 
     $keys = array_keys($dataArray);
    
-    extract($dataArray);
-    // print_r(compact($keys)); die();
-
-    // return view('bostad', compact($keys));
+    extract($dataArray); 
     return view('joels/bostad::bostad',compact($keys));
   }
 }

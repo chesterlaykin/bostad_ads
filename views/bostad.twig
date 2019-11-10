@@ -112,7 +112,7 @@
                              
                             {% set adType = (key == 'korttid') ? 'Korttidskontrakt' : 'Hyresrätter' %}
 
-                            {% set currentMapUrl = "mapUrl ad.Gatuadress|replace({' ':'+'}) + ad.Kommun|replace(' ':'+') " %}
+                            {% set currentMapUrl = (mapUrl ~ ad.Gatuadress)|replace({' ':'+'}) ~ ad.Kommun|replace({' ':'+'})  %}
     
                             {% if ad.AnnonseradFran == date('now') %}
                                 {% set income_today = 'income_today' %}
@@ -129,7 +129,7 @@
                                     
                                         <h2>{{"#{ad.Kommun}, #{ad.Stadsdel}"}}</h2>       
                                         
-                                    <a target="_blank" href="{{"#{domain} #{ad.Url} "}}"><i class="fas fa-external-link-alt"></i>{{ad.Gatuadress}}</span></a>
+                                    <a target="_blank" href="{{"#{domain}#{ad.Url} "}}"><i class="fas fa-external-link-alt"></i>{{ad.Gatuadress}}</span></a>
                                         <div class="map-link"><a target="_blank" href="{{ currentMapUrl }}"><i class="fas fa-external-link-alt">
                                             </i><span>Karta</span></a>
                                         </div>
@@ -166,7 +166,7 @@
                                             <div>Våningsplan</div><div class="size-bigger">{{ad.Vaning}}</div>
                                         </div>
                                         <div class="flexctr">
-                                            <div>Hyra</div><div class="size-bigger">{{"#{ad.Vaning} kr"}}</div>
+                                            <div>Hyra</div><div class="size-bigger">{{"#{ad.Hyra} kr"}}</div>
                                         </div>
                                         
                                         {% if ad.Balkong %} 
