@@ -84,19 +84,20 @@
         
         
         <div id="header-wrap">
-            <div id="header">
+            <div id="header" class="container py-3">
                 <h1>Annonser - {{ "now"|date("Y/m/d", "Europe/Paris") }}  </h1>
                 <p>Från Stockholms bostadskö</p>
             </div>
         </div>
-        <div class="content">
-            <div class="row">
-                <div class="size-smaller">Listan är <span class="size-bigger">{{ timeDiffHours|round(2) }}</span> timmar gammal.</div>
+        <div class="content container">
+            <div class="row mb-5">
+                 
+                    <div class="col-3 size-smaller">Listan är <span class="size-bigger">{{ timeDiffHours|round(2) }}</span> timmar gammal.</div>
 
-                {% if not nyinkommet %}
-                    <p class="notification">Inget nyinkommet idag</p>
-                {% endif %}
-              
+                    {% if not nyinkommet %}
+                        <p class="col-6 justify-content-center notification">Inget nyinkommet idag</p>
+                    {% endif %}
+                
             </div>
             
             {% if adsOfTypes is defined and adsOfTypes %}
@@ -104,10 +105,15 @@
                 {% for key, adsOfType in adsOfTypes %} 
    
                     {% set adType = (key == 'korttid') ? 'Korttidskontrakt' : 'Hyresrätter' %}
-
-                    <h2>{{ "#{adType} ( #{adsOfType.ads|length} st ) "}}</h2> 
-                    <p>{{ adsOfType.excluded_count == 1 ? "#{adsOfType.excluded_count} bostad är exkluderad." : "#{adsOfType.excluded_count} bostäder är exkluderade."}}</p>
-                    <div class="adswrap flexctr">
+                    <div class="row">
+                        <div class="col-9 col-md-5">
+                            <h2>{{ "#{adType} ( #{adsOfType.ads|length} st ) "}}</h2> 
+                        </div>
+                        <div class="col-12">
+                            <p>{{ adsOfType.excluded_count == 1 ? "#{adsOfType.excluded_count} bostad är exkluderad." : "#{adsOfType.excluded_count} bostäder är exkluderade."}}</p>
+                        </div>    
+                    </div>
+                    <div class="row">
                         {% for key,ad in adsOfType.ads %}
                              
                             {% set adType = (key == 'korttid') ? 'Korttidskontrakt' : 'Hyresrätter' %}
@@ -120,86 +126,88 @@
                              {% else %}
                                 {% set income_today = '' %}
                             {% endif %}
-                             
-                            <div class="ad {{ ad.Hyra > 7000 ? 'expensive ' : ' '}} {{income_today}}">
-                                <div class="">
-                                    
-                                    <div class="some"></div>
-                                    <div class="info1">
-                                    
-                                        <h2>{{"#{ad.Kommun}, #{ad.Stadsdel}"}}</h2>       
-                                        
-                                    <a target="_blank" href="{{"#{domain}#{ad.Url} "}}"><i class="fas fa-external-link-alt"></i>{{ad.Gatuadress}}</span></a>
-                                        <div class="map-link"><a target="_blank" href="{{ currentMapUrl }}"><i class="fas fa-external-link-alt">
-                                            </i><span>Karta</span></a>
-                                        </div>
-                                        
-                                        <div class="hr hr_first"><hr /></div>
-                                        
-                                    </div>                  
-
-                                    <div class="infosection flexctr info2">        
-                                    
-                                        {% if ad.Antal > 1 %}
-                                            <div class="flexctr">
-                                                <div><strong> {{" #{ad.Antal} lägenheter"}}</strong></div>
-                                            </div>
-                                        {% endif %}
-                                        
-                                        
-                                         {% if ad.Nyproduktion %}
-                                                <div class="flexctr">
-                                                    <div><strong>Nyproduktion</strong></div>
+                              
+                            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 ad {{ ad.Hyra > 7000 ? 'expensive ' : ''}}{{income_today}}">
+                                <div class="h-100">
+                                    <div class="h-100">
+                                        <div>
+                                            <div class="info1">
+                                            
+                                                <h2>{{"#{ad.Kommun}, #{ad.Stadsdel}"}}</h2>       
+                                                
+                                            <a target="_blank" href="{{"#{domain}#{ad.Url} "}}"><i class="fas fa-external-link-alt"></i>{{ad.Gatuadress}}</span></a>
+                                                <div class="map-link"><a target="_blank" href="{{ currentMapUrl }}"><i class="fas fa-external-link-alt">
+                                                    </i><span>Karta</span></a>
                                                 </div>
-                                        {% endif %}
+                                                
+                                                <div class="hr hr_first"><hr /></div>
+                                                
+                                            </div>                  
 
-                                        <div class="flexctr">
-                                            <div>Antal rum</div><div class="size-bigger">{{ ad.AntalRum }}</div>
-                                        </div>
-                                                                          
-                                        {% if ad.Antal == 1 %}
-                                            <div class="flexctr">
-                                                <div>Yta</div><div class="size-bigger">{{ad.Yta}}</div>
+                                            <div class="infosection flexctr info2">        
+                                            
+                                                {% if ad.Antal > 1 %}
+                                                    <div class="flexctr">
+                                                        <div><strong> {{" #{ad.Antal} lägenheter"}}</strong></div>
+                                                    </div>
+                                                {% endif %}
+                                                
+                                                
+                                                {% if ad.Nyproduktion %}
+                                                        <div class="flexctr">
+                                                            <div><strong>Nyproduktion</strong></div>
+                                                        </div>
+                                                {% endif %}
+
+                                                <div class="flexctr">
+                                                    <div>Antal rum</div><div class="size-bigger">{{ ad.AntalRum }}</div>
+                                                </div>
+                                                                                
+                                                {% if ad.Antal == 1 %}
+                                                    <div class="flexctr">
+                                                        <div>Yta</div><div class="size-bigger">{{ad.Yta}}</div>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="flexctr">
+                                                    <div>Våningsplan</div><div class="size-bigger">{{ad.Vaning}}</div>
+                                                </div>
+                                                <div class="flexctr">
+                                                    <div>Hyra</div><div class="size-bigger">{{"#{ad.Hyra} kr"}}</div>
+                                                </div>
+                                                
+                                                {% if ad.Balkong %} 
+                                                    <div class="flexctr">
+                                                        <div>Balkong</div>                 
+                                                    </div>
+                                                {% endif %}
                                             </div>
-                                        {% endif %}
-                                        <div class="flexctr">
-                                            <div>Våningsplan</div><div class="size-bigger">{{ad.Vaning}}</div>
-                                        </div>
-                                        <div class="flexctr">
-                                            <div>Hyra</div><div class="size-bigger">{{"#{ad.Hyra} kr"}}</div>
-                                        </div>
-                                        
-                                        {% if ad.Balkong %} 
-                                            <div class="flexctr">
-                                                <div>Balkong</div>                 
+                                            
+                                            <div class="infosection flexctr info3">
+                                                <div class="flexctr">
+                                                    <div>Annonserad från:</div><div> {{ad.AnnonseradFran}}</div>
+                                                </div>
+                                                <div class="flexctr">
+                                                    <div>Annonserad till</div><div> {{ad.AnnonseradTill}}</div>
+                                                </div>
                                             </div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="infosection flexctr info3">
-                                        <div class="flexctr">
-                                            <div>Annonserad från:</div><div> {{ad.AnnonseradFran}}</div>
+
+                                            {% if ad.KoNamn != 'Bostadskön' %}
+                                                <div class="hr hr_last"><hr /></div>
+
+                                                <div class="infosection flexctr info4">                  
+        
+                                                        <div class="flexctr">
+                                                            <div>Könamn:</div><div>{{ ad.KoNamn }}</div>
+                                                        </div> 
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                        <div class="flexctr">
-                                            <div>Annonserad till</div><div> {{ad.AnnonseradTill}}</div>
-                                        </div>
                                     </div>
-
-                                    <div class="hr hr_last"><hr /></div>
-
-                                    <div class="infosection flexctr info4">                  
-
-                                        {% if ad.KoNamn != 'Bostadskön' %}
-                                          
-                                            <div class="flexctr">
-                                                <div>Könamn:</div><div>{{ ad.KoNamn }}</div>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                
                                 </div>
                             </div>
+
+                           
+                            
                          {% endfor %}
                     </div>
                  {% endfor %}

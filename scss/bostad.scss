@@ -1,33 +1,34 @@
-:root {
-    --link-color: #517eff;                   /*#0e9edf */;  
-    --faded: #a2a2a2;
-    --b1: #ffffea;
-    --b2: #e7e7e7;
-    --a1: #acb8fc;
-    --a1b_op: rgba(255, 255, 255, 0.09);
-    
-    --a2: rgba(142, 166, 197, 0.73); /*#69358c;*/
-    --highlight1: linear-gradient(to right, var(--accent_a1) 0%,var(--accent_a2) 96%);
-    --highlight2_op: rgba(74, 122, 255, 0.46);
-    --accent_a1: #f9e975b6;
-    --accent_a2: #4acc719d 96%;
-    --offwhite: rgb(253, 250, 243);
-    --radial1: radial-gradient(circle at 50%, #75adf7, #fff6c10d 60%, var(--a1) 65%);
-  }
+ /*   var(--b2);
   
+/* Color variables */
+$link-color: #517eff;                   /*#0e9edf */;  
+$faded: #a2a2a2;
+$b1: #ffffea;
+$b2: #e7e7e7;
+$a1: #acb8fc;
+$a1b_op: rgba(255, 255, 255, 0.09);
+  
+$a2: rgba(142, 166, 197, 0.73); /*#69358c;*/
+$accent_a1: #f9e975b6;
+$accent_a2: #4acc719d 96%;
+$highlight1: linear-gradient(to right, $accent_a1 0%, $accent_a2 96%);
+$highlight2_op: rgba(74, 122, 255, 0.2);
+
+$offwhite: rgb(253, 250, 243);
+$radial1: radial-gradient(circle at 50%, #75adf7, #fff6c10d 60%, $a1 65%);
 
 
-
-
-  body{
+body{
      /* background: #d9d9fb; */         /* pattern.png */
-     /* background-image: url('pattern.png');  */
+    //   background-image: url('pattern.png');  
      
      background-repeat: no-repeat; 
      background-size:1300px auto;
      font-family: 'Muli', 'sans-serif';
      position: relative;
      margin: 0;
+
+     font-size:10;
     
 }
 @media (min-width: 1300px){
@@ -38,7 +39,7 @@
 body::after {
     content: "";
     background: #4956b9;
-    background: var(--radial1);
+    background: $radial1;
     /* opacity: 0.2; */
     /* opacity: 0.9; */
     top: 0;
@@ -52,28 +53,36 @@ body::after {
 .content{
     position: relative;
     /* padding: 0 4em 4em 4em; */
-    
+    > .row > div > h2{
+        background: $highlight1;
+        padding: 0.3em 1.1em;
+        display: inline-block; 
+        border-radius:4px;
+        /* border-top-right-radius: 4px; 
+    border-top-left-radius: 4px; */
+        /* margin-bottom:0; */
+    }
+
+    .income_today{
+        > div{
+            background: $highlight1;
+            padding:5px;
+        }
+        
+        /* border: 6px solid  */
+    }
 }
 
-#header,
-.content{
-    max-width: 1300px;
-    margin:0 auto;
-}
-
-.content > h2{
-    background: var(--highlight1);
-    padding: 0.3em 1.1em;
-    display: inline-block; 
-    border-radius:4px;
-    /* border-top-right-radius: 4px; 
-border-top-left-radius: 4px; */
-    /* margin-bottom:0; */
-}
+// #header,
+// .content{
+//     max-width: 1300px;
+//     margin:0 auto;
+// }
+ 
  
 a{
     text-decoration: none;
-    color:  var(--link-color); 
+    color:  $link-color;
     font-size: 1.3em;
 }
 p{
@@ -81,17 +90,21 @@ p{
     padding-bottom: 5px;
     margin:0;
 }
-.expensive a {
-    /* --link-color: var(--faded); */
+ 
+.expensive{
+    a {
+        /* --link-color: $faded */
+    }
+    .info1 i{
+        color: $faded;
+    }
+    hr{
+        color:#d5d5d5;
+    }
 }
-.expensive .info1 i{
-    color: var(--faded);
-}
-.expensive hr{
-    color:#d5d5d5;
-}
+ 
 .faded{
-    color: var(--faded);
+    color: $faded;
 }
 
 .hr{
@@ -103,7 +116,7 @@ p{
     font-family: 'Muli','sans-serif';
 } */
 /* a:hover{
-    border-bottom: var(--link-color) 1px solid;
+    border-bottom: $link-color 1px solid;
 } */
 h1{
     margin-bottom: 1.8em;
@@ -111,61 +124,100 @@ h1{
     /* box-shadow: 1px 2px 2px 0px #040404; */
 }
 #header-wrap{
-    background: var(--a1b_op);
-    border-bottom: 1px solid var(--a2);
+    background: $a1b_op;
+    border-bottom: 1px solid $a2;
     margin-bottom: 3em;
 }
-#header {
-    padding: 0.8em 0; 
-    
+
+#header{ 
+    p{
+        color: $b2;
+    }
+    > h1{
+        width:50%;
+        padding: 0;
+        margin-bottom: 0.2em;
+        margin-top:0;
+        /* padding: 0.3em 0; */
+        color: $b1;
+
+        + div{
+            font-weight: normal;
+            margin-left: 1.1em;
+            color: white;
+            letter-spacing: 1px;
+        }
+    }
 }
-#header p{
-    color: var(--b2)
-}
-#header > h1{
-    width:50%;
-    padding: 0;
-    margin-bottom: 0.2em;
-    margin-top:0;
-    /* padding: 0.3em 0; */
-    color: var(--b1);
-}
-#header h1 + div{
-    font-weight: normal;
-    margin-left: 1.1em;
-    color: white;
-    letter-spacing: 1px;
-}
+  
 h2{
     font-size: 1.25em;
 }
 .adswrap{
+    display:flex;
     flex-wrap: wrap; 
 }
 .ad{
-    flex: 0 0 20%;
+    // flex: 0 0 20%;
     /* min-height: 200px; */
-    margin-right: 1.6%;
-    padding:5px;
+    padding-right: 1.6% !important;
+    // padding:5px;
     /* padding:0.5em 1em 3em 1.2em; */
-    margin-bottom: 2em;
-    /* background: white; */
-    background: var(--offwhite);
+    margin-bottom: 2em;  
     border-radius: 5px;
     /* border: 6px solid transparent; */
     font-size:91%;
     display: flex; 
     flex-direction: column;
+
+    &.expensive {
+        * {
+            color: $faded;
+        }
+         
+        > div{
+            border-color:rgba(74, 122, 255, 0.04) !important;
+
+            > div{
+                background: rgba(255, 255, 255, 0.43);
+            }
+        }
+    }
+
+    &:not(.income_today){
+        > div{
+            border: 1px solid $highlight2_op;   
+        }
+    }
+
+    h2{
+        font-weight:bold;
+    }
+
+    > div > div{
+        background: $offwhite;
+        
+        padding-right: 1em;
+        padding-left: 1em;
+        padding-top: 1.8em; 
+        padding-bottom: 1.8em;
+        border-radius: 3px;
+        flex-grow: 1;
+        background:rgb(255, 255, 255);
+        
+
+    }
+
+    &:first-child {
+        /* border-top-left-radius: 0; */
+    }
 }
-.ad > div{
-    border-radius: 3px;
-    flex-grow: 1;
-    background:rgb(255, 255, 255);
-    padding: 1em;
+.ad,
+.income_today{
+    padding:4px;
 }
-.ad:first-child {
-    /* border-top-left-radius: 0; */
-}
+  
+
 hr{
     border-top: none;
     color: #bdbdbd;
@@ -181,25 +233,31 @@ hr{
 .infosection{
     width: 100%;
     flex-direction: column;
-}
-.infosection > div.flexctr > div{
-    flex: 1 0 58%; 
-}
-.infosection > div{
-    flex: 0 0 100%; 
-    line-height: 1.9em;
-}
 
-.info1 > p{
-    font-size: 1.2em;
-}
-.info1 > h2{
-    min-height: 50px
-}
-.info1 a > i{
-    margin-right: 7px;
-    color: var(--link-color); 
-}
+    > div{
+        flex: 0 0 100%; 
+        line-height: 1.9em;
+
+        &.flexctr > div{
+            flex: 1 0 58%; 
+        }
+    }
+} 
+ 
+
+.info1{
+    > p{
+        font-size: 1.2em;
+    }
+    > h2{
+        min-height: 50px
+    }
+    a > i{
+        margin-right: 7px;
+        color: $link-color;
+    }
+}  
+
 .map-link * {
     color: rgb(162, 162, 162);
     margin-right: 7px;
@@ -207,7 +265,7 @@ hr{
     line-height: 3.4em;
 }
 a > span:hover{
-    border-bottom:var(--link-color) 1px solid;
+    border-bottom: $link-color 1px solid;
 }   
 .map-link a > i{
     color:rgb(162, 162, 162);
@@ -220,34 +278,21 @@ a > span:hover{
     position:absolute;
     top: 0;
     right:0;
+    
+    > i{
+        font-size: 27em;
+        color:rgba(66, 179, 255, 0.137);
+    }
 }
-.homesymbol > i{
-    font-size: 27em;
-    color:rgba(66, 179, 255, 0.137);
-}
-.expensive *{
-    color: var(--faded);
 
-}
+
 .flexctr{
-    display:flex;
+    // background: yellow;
+    display:flex; 
     /* min-height: 50px; */
 }
 
-.ad,
-.income_today{
-    padding:4px;
-}
 
-.content .adswrap .income_today{
-    background: var(--highlight1);
-    padding:5px;
-    /* border: 6px solid  */
-}
-.ad:not(.income_today){
-    border: 1px solid var(--highlight2_op);
-    
-}
 .size-bigger{
     font-size: 120%;
 }
